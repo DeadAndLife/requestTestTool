@@ -18,10 +18,13 @@
 #define kOption @"option"
 #define kEncrypt @"encrypt"
 #define kJsonString @"jsonString"
+#define kLogPath @"logPath"
 
-//bounds
-
-#define kScreenWidth [[UIScreen mainScreen] bounds].size.width
+/**
+ *屏幕宽高
+ */
+#define SCREEN_W [UIScreen mainScreen].bounds.size.width
+#define SCREEN_H [UIScreen mainScreen].bounds.size.height
 
 //categroy
 #import "NSString+encryptString.h"

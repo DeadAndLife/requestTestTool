@@ -16,9 +16,9 @@ typedef void(^QYHTTPSessionManagerCompletionHandle) (id responseObject, NSURLSes
 //+(instancetype)qyManager;
 
 //封装网络get请求,成功的block和失败的,合二为一
--(NSURLSessionDataTask *)GET:(NSString *)URLString parameters:(id)parameters CompletionHandle:(QYHTTPSessionManagerCompletionHandle)completionHandle;
+- (NSURLSessionDataTask *)GET:(NSString *)URLString parameters:(id)parameters CompletionHandle:(QYHTTPSessionManagerCompletionHandle)completionHandle;
 
 //封装网络POST请求,成功的block和失败的,合二为一
--(NSURLSessionDataTask *)POST:(NSString *)URLString parameters:(id)parameters CompletionHandle:(QYHTTPSessionManagerCompletionHandle)completionHandle;
+- (NSURLSessionDataTask *)POST:(NSString *)URLString parameters:(id)parameters CompletionHandle:(QYHTTPSessionManagerCompletionHandle)completionHandle;
 
 @end
