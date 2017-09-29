@@ -7,8 +7,9 @@
 //
 
 #import "PortListTableViewController.h"
-#import "HomeTableViewCell.h"
 #import "PortDetailsViewController.h"
+#import "HomeTableViewCell.h"
+#import "Common.h"
 
 @interface PortListTableViewController ()<UITextFieldDelegate, UIGestureRecognizerDelegate>
 
@@ -54,6 +55,16 @@
     
     [self.view addGestureRecognizer:tapGR];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    //增加监听，当键退出时收出消息
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -88,6 +99,23 @@
         [self.view endEditing:YES];
     }
     
+}
+
+#pragma mark - keyboard
+//键盘显示时调用
+- (void)keyboardWillShow:(NSNotification *)aNotification {
+    NSDictionary *userInfo = [aNotification userInfo];
+    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [aValue CGRectValue];
+    int height = keyboardRect.size.height;
+    
+    self.tableView.frame = CGRectMake(0, 0, SCREEN_W, SCREEN_H - height);
+}
+
+//当键退出时调用
+- (void)keyboardWillHide:(NSNotification *)aNotification {
+    
+    self.tableView.frame = CGRectMake(0, 0, SCREEN_W, SCREEN_H);
 }
 
 #pragma mark-手势代理，解决和tableview点击发生的冲突
