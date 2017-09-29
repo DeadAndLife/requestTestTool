@@ -110,7 +110,7 @@
                         <outlet property="delegate" destination="-1" id="mr1-ee-AWl"/>
                     </connections>
                 </textField>
-                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ZsM-Jt-Fs9">
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="ZsM-Jt-Fs9">
                     <rect key="frame" x="195.5" y="192" width="171.5" height="29"/>
                     <segments>
                         <segment title="GET"/>

@@ -92,6 +92,15 @@
     [self optionInit];
 }
 
+- (void)viewInit {
+    if (self.plistData[kRequestURL]) {
+        self.portURL.text = self.plistData[kRequestURL];
+    }
+    if (self.plistData[kRequestType]) {
+        [self.requestType setSelectedSegmentIndex:(long)self.plistData[kRequestType]];
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -111,6 +120,20 @@
     [self dataInit];
     
     // Do any additional setup after loading the view from its nib.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self viewInit];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self saveParameter:self.saveParameter];
 }
 
 - (IBAction)tapGRClick:(UITapGestureRecognizer *)sender {
@@ -133,7 +156,11 @@
  @param sender 发送按钮
  */
 - (IBAction)sendRequest:(UIButton *)sender {
-     NSLog(@"%s", __func__);
+    if (self.firstResponder) {
+        [self.firstResponder resignFirstResponder];
+    }
+    
+    NSLog(@"%s", __func__);
 }
 
 /**
@@ -229,9 +256,18 @@
     if (textField == self.portURL) {
         
     } else {
+        NSInteger type = textField.tag % 10;
+        NSInteger row = textField.tag / 10 % 100;
+        NSInteger section = textField.tag / 1000 - 1;
         
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:textField.tag - 100 inSection:0];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
         ParameterTableViewCell *cell = [self.parameterTableView cellForRowAtIndexPath:indexPath];
+        
+        if (type == 0) {//key
+            cell.keyText.placeholder = cell.keyText.text;
+        } else {//value
+            cell.valueText.placeholder = cell.valueText.text;
+        }
         
     }
     
@@ -241,9 +277,30 @@
     [textField resignFirstResponder];
     
     if (textField == self.portURL) {
+    
+    } else {
+        NSInteger type = textField.tag % 10;
+        NSInteger row = textField.tag / 10 % 100;
+        NSInteger section = textField.tag / 1000 - 1;
         
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:textField.tag - 100 inSection:0];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
         ParameterTableViewCell *cell = [self.parameterTableView cellForRowAtIndexPath:indexPath];
+        
+        if (section == 0) {//header
+            if (type == 0) {//key
+                [self.headerDict setObject:self.headerDict[cell.keyText.placeholder]  forKey:cell.keyText.text];
+                [self.headerDict removeObjectForKey:cell.keyText.placeholder];
+            } else {//value
+                [self.headerDict setObject:cell.valueText.text forKey:cell.keyText.text];
+            }
+        } else {//参数
+            if (type == 0) {//key
+                [self.parameterDict setObject:self.parameterDict[cell.keyText.placeholder] forKey:cell.keyText.text];
+                [self.parameterDict removeObjectForKey:cell.keyText.placeholder];
+            } else {//value
+                [self.parameterDict setObject:cell.valueText.text forKey:cell.keyText.text];
+            }
+        }
         
     }
     
@@ -307,8 +364,9 @@
             cell.valueText.text = [self.headerDict valueForKey:cell.keyText.text];
             
             cell.keyText.delegate = self;
+            cell.keyText.tag = 1000 + indexPath.row * 10 + 0;
             cell.valueText.delegate = self;
-            
+            cell.valueText.tag = 1000 + indexPath.row * 10 + 1;
         }
     } else {//parameter
         if (indexPath.row == self.parameterDict.allKeys.count) {//最后一行
@@ -321,8 +379,9 @@
             cell.valueText.text = [self.parameterDict valueForKey:cell.keyText.text];
             
             cell.keyText.delegate = self;
+            cell.keyText.tag = 2000 + indexPath.row * 10 + 0;
             cell.valueText.delegate = self;
-            
+            cell.valueText.tag = 2000 + indexPath.row * 10 + 1;
         }
     }
     
