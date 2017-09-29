@@ -18,6 +18,7 @@
 #define kOption @"option"
 #define kEncrypt @"encrypt"
 #define kJsonString @"jsonString"
+#define kLogPath @"logPath"
 
 //bounds
 
