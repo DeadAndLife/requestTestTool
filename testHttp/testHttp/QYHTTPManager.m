@@ -14,7 +14,7 @@
 @implementation QYHTTPManager
 
 //+(instancetype)qyManager{
-//    QYHTTPManager *manager = [[QYHTTPManager alloc] initWithBaseURL:[NSURL URLWithString:kBaseURL]];
+//    QYHTTPManager *manager = [[QYHTTPManager alloc] initWithBaseURL:[NSURL URLWithString:kRequestURL]];
 //
 //    return manager;
 //}

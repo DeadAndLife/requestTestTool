@@ -7,6 +7,7 @@
 //
 
 #import "PortDetailsViewController.h"
+#import "ParameterTableViewCell.h"
 #import "Common.h"
 
 @interface PortDetailsViewController ()<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
@@ -56,6 +57,37 @@
     
 }
 
+- (void)headerInit {
+    
+    if (!(self.headerDict = self.plistData[kHeader])) {
+        self.headerDict = [NSMutableDictionary dictionary];
+    }
+}
+
+- (void)parameterInit {
+    
+    if (!(self.parameterDict = self.plistData[kParameter])) {
+        self.parameterDict = [NSMutableDictionary dictionary];
+    }
+}
+
+- (void)optionInit {
+    
+    if (!(self.optionDict = self.plistData[kOption])) {
+        self.optionDict = [NSMutableDictionary dictionary];
+    }
+}
+
+- (void)dataInit {
+    //数据源
+    [self plistInit];
+    //请求header的字典
+    [self headerInit];
+    //请求参数字典
+    [self parameterInit];
+    //请求选项的字典
+    [self optionInit];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -66,7 +98,7 @@
     [self.saveParameter addTarget:self action:@selector(saveParameter:) forControlEvents:UIControlEventTouchUpInside];
     [self.saveLog addTarget:self action:@selector(saveLog:) forControlEvents:UIControlEventTouchUpInside];
     
-    [self plistInit];
+    [self dataInit];
     
     // Do any additional setup after loading the view from its nib.
 }
@@ -150,11 +182,11 @@
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case 0:{
-            return 2;
+            return self.headerDict.allKeys.count + 1;
         }
             break;
         case 1:{
-            return 3;
+            return self.parameterDict.allKeys.count + 1;
         }
             break;
         default:{
@@ -165,11 +197,72 @@
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"item"];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"第%ld组第%ld行", (long)indexPath.section, indexPath.row];
+    ParameterTableViewCell *cell;
+    
+    if (indexPath.section == 0) {//header
+        if (indexPath.row == self.headerDict.allKeys.count) {//最后一行
+            cell = [[NSBundle mainBundle] loadNibNamed:@"ParameterTableViewCell" owner:self options:nil][1];
+            cell.addLabel.text = @"增加一个header参数";
+        } else {
+            cell = [[NSBundle mainBundle] loadNibNamed:@"ParameterTableViewCell" owner:self options:nil][0];
+            
+            cell.keyText.text = self.headerDict.allKeys[indexPath.row];
+            if ([self.headerDict valueForKey:cell.keyText.text] && ![[self.headerDict valueForKey:cell.keyText.text] isEqual:NULL] ) {
+                cell.valueText.text = [self.headerDict valueForKey:cell.keyText.text];
+            } else {
+                
+            }
+            
+        }
+    } else {//parameter
+        if (indexPath.row == self.parameterDict.allKeys.count) {//最后一行
+            cell = [[NSBundle mainBundle] loadNibNamed:@"ParameterTableViewCell" owner:self options:nil][1];
+            cell.addLabel.text = @"增加一个请求参数";
+        } else {
+            cell = [[NSBundle mainBundle] loadNibNamed:@"ParameterTableViewCell" owner:self options:nil][0];
+            
+            cell.keyText.text = self.parameterDict.allKeys[indexPath.row];
+            cell.valueText.text = [self.parameterDict valueForKey:cell.keyText.text] ? : @"";
+        }
+    }
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.section == 0) {//header
+        if (indexPath.row == self.headerDict.allKeys.count) {//最后一行
+            NSString *key;
+            int i = 0;
+            do {
+                key = [NSString stringWithFormat:@"key%02d", i];
+                ++i;
+            } while ([self.headerDict.allKeys containsObject:key]);
+            [self.headerDict setValue:[NSString stringWithFormat:@"value%02d", i] forKey:key];
+        }
+    } else {//parameter
+        if (indexPath.row == self.parameterDict.allKeys.count) {//最后一行
+            NSString *key;
+            int i = 0;
+            do {
+                key = [NSString stringWithFormat:@"key%02d", i];
+                ++i;
+            } while ([self.parameterDict.allKeys containsObject:key]);
+            [self.parameterDict setValue:[NSString stringWithFormat:@"value%02d", i] forKey:key];
+        }
+    }
+    
+    [self.parameterTableView reloadData];
+    
+}
+
+- (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return indexPath.row;
 }
 
 - (void)didReceiveMemoryWarning {
