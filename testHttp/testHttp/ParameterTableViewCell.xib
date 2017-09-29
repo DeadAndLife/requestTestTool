@@ -20,18 +20,24 @@
                 <subviews>
                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="key" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KPE-Ib-qXu">
                         <rect key="frame" x="20" y="8" width="30.5" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30.5" id="qqB-lu-SIg"/>
+                        </constraints>
                         <nil key="textColor"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=":" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q40-6T-E0w">
-                        <rect key="frame" x="58.5" y="8" width="5" height="21"/>
+                        <rect key="frame" x="54.5" y="8" width="5" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="5" id="xCi-HH-T5r"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="value" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EPG-95-oat">
-                        <rect key="frame" x="71.5" y="8" width="44.5" height="28"/>
+                        <rect key="frame" x="63.5" y="8" width="44.5" height="28"/>
                         <nil key="textColor"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <textInputTraits key="textInputTraits"/>
@@ -49,9 +55,9 @@
                     <constraint firstItem="Q40-6T-E0w" firstAttribute="top" secondItem="KPE-Ib-qXu" secondAttribute="top" id="DyW-jH-r0c"/>
                     <constraint firstItem="EPG-95-oat" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="Mtl-Pe-bLj"/>
                     <constraint firstItem="auD-WK-4ci" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="P7U-4H-M7S"/>
-                    <constraint firstItem="Q40-6T-E0w" firstAttribute="leading" secondItem="KPE-Ib-qXu" secondAttribute="trailing" constant="8" id="W26-sK-WBi"/>
+                    <constraint firstItem="Q40-6T-E0w" firstAttribute="leading" secondItem="KPE-Ib-qXu" secondAttribute="trailing" constant="4" id="W26-sK-WBi"/>
                     <constraint firstAttribute="bottom" secondItem="EPG-95-oat" secondAttribute="bottom" constant="8" id="WPR-Tf-GY3"/>
-                    <constraint firstItem="EPG-95-oat" firstAttribute="leading" secondItem="Q40-6T-E0w" secondAttribute="trailing" constant="8" id="XAv-4t-Z2d"/>
+                    <constraint firstItem="EPG-95-oat" firstAttribute="leading" secondItem="Q40-6T-E0w" secondAttribute="trailing" constant="4" id="XAv-4t-Z2d"/>
                     <constraint firstItem="KPE-Ib-qXu" firstAttribute="leading" secondItem="auD-WK-4ci" secondAttribute="trailing" constant="4" id="YqV-hC-vJn"/>
                     <constraint firstItem="EPG-95-oat" firstAttribute="top" secondItem="KPE-Ib-qXu" secondAttribute="top" id="j8h-gf-xpX"/>
                     <constraint firstItem="Q40-6T-E0w" firstAttribute="centerY" secondItem="KPE-Ib-qXu" secondAttribute="centerY" id="nNf-7b-RVE"/>

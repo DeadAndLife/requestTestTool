@@ -162,12 +162,17 @@
     }
     
     if (self.requestType.selectedSegmentIndex == 0) {//GET
-        
         [[[QYHTTPManager alloc] init] GET:self.portURL.text
                                parameters:self.parameterDict
                          CompletionHandle:^(id responseObject, NSURLSessionTask *task, NSError *error) {
-                             NSLog(@"%@",responseObject);
-                             NSLog(@"%@",error);
+                             
+                             if (responseObject) {
+                                 NSData *data = (NSData *)responseObject;
+                                 [self showLogsWithResultString:data.description];
+                             } else {
+                                 [self showLogsWithErrorString:error.description];
+                             }
+                             
                          }];
         
     } else {//POST
@@ -177,7 +182,12 @@
                              
                               NSLog(@"%@",responseObject);
                               NSLog(@"%@",error);
-                              
+                              if (responseObject) {
+                                  NSData *data = (NSData *)responseObject;
+                                  [self showLogsWithResultString:data.description];
+                              } else {
+                                  [self showLogsWithErrorString:error.description];
+                              }
                           }];
     }
     
@@ -253,10 +263,18 @@
     
 }
 
-//在界面上显示日志
-- (void)showLogsWithString:(NSString *)str {
+//在界面上显示错误日志
+- (void)showLogsWithErrorString:(NSString *)errorStr{
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *newStr = [NSString stringWithFormat:@"\n%@",str];
+        NSString *newStr = [NSString stringWithFormat:@"\n*****error*****\n%@",errorStr];
+        self.logView.text = [self.logView.text stringByAppendingString:newStr];
+    });
+}
+
+//在界面上显示结果日志
+- (void)showLogsWithResultString:(NSString *)resultStr{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *newStr = [NSString stringWithFormat:@"\n*****result*****\n%@",resultStr];
         self.logView.text = [self.logView.text stringByAppendingString:newStr];
     });
 }
