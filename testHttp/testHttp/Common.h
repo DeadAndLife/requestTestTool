@@ -9,18 +9,22 @@
 #ifndef Common_h
 #define Common_h
 
-//url
+//key
 
-#define kBaseURL @"http://guanli.zhaihongli.com/"
-#define kLoginAPI @"api/login/dologin"
-#define kNewsCategory @"api/xinwen/get_category_ss"
-#define kNewsList @"api/xinwen/get_news_s"
-#define kDutyList @"api/lzjzs/get_lzjz_ss"
-#define kAddDuty @"api/lzjzs/set_lzjz"
+#define kRequestURL @"requestUrl"
+#define kHeader @"header"
+#define kParameter @"parameter"
+#define kRequestType @"requestType"
+#define kOption @"option"
+#define kEncrypt @"encrypt"
+#define kJsonString @"jsonString"
 
 //bounds
 
 #define kScreenWidth [[UIScreen mainScreen] bounds].size.width
+
+//categroy
+#import "NSString+encryptString.h"
 
 ///**
 // *自定义格式输出
