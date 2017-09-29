@@ -8,6 +8,7 @@
 
 #import "PortDetailsViewController.h"
 #import "ParameterTableViewCell.h"
+#import "QYHTTPManager.h"
 #import "Common.h"
 
 @interface PortDetailsViewController ()<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate>
@@ -158,6 +159,26 @@
 - (IBAction)sendRequest:(UIButton *)sender {
     if (self.firstResponder) {
         [self.firstResponder resignFirstResponder];
+    }
+    
+    if (self.requestType.selectedSegmentIndex == 0) {//GET
+        
+        [[[QYHTTPManager alloc] init] GET:self.portURL.text
+                               parameters:self.parameterDict
+                         CompletionHandle:^(id responseObject, NSURLSessionTask *task, NSError *error) {
+                             NSLog(@"%@",responseObject);
+                             NSLog(@"%@",error);
+                         }];
+        
+    } else {//POST
+        [[[QYHTTPManager alloc] init] POST:self.portURL.text
+                                parameters:self.parameterDict
+                          CompletionHandle:^(id responseObject, NSURLSessionTask *task, NSError *error) {
+                             
+                              NSLog(@"%@",responseObject);
+                              NSLog(@"%@",error);
+                              
+                          }];
     }
     
     NSLog(@"%s", __func__);
