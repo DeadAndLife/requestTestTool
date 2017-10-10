@@ -26,6 +26,10 @@
 #define SCREEN_W [UIScreen mainScreen].bounds.size.width
 #define SCREEN_H [UIScreen mainScreen].bounds.size.height
 
+#define HeightSUBNavigation(H) H - self.navigationController.navigationBar.frame.size.height
+#define HeightSUBNavigationAndStatus(H) H - self.navigationController.navigationBar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height
+#define HeightSUBNavigationAndStatusAndTabBar(H) H - self.navigationController.navigationBar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height - self.tabBarController.tabBar.frame.size.height
+
 //categroy
 #import "NSString+encryptString.h"
 

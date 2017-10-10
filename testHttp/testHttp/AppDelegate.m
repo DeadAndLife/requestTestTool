@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "CYTESTViewController.h"
+
 
 @interface AppDelegate ()
 
@@ -14,9 +16,24 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+#if 1
+    
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    CYTESTViewController *cyTestVC = [[CYTESTViewController alloc] init];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cyTestVC];
+    
+    
+    [self.window setRootViewController:navigationController];
+    
+#else
+    
+#endif
+    
     return YES;
 }
 

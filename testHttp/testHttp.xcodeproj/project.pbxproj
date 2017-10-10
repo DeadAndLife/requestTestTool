@@ -25,6 +25,7 @@
 		44C45F471F79F121001811EC /* QYHTTPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C45F451F79F120001811EC /* QYHTTPManager.m */; };
 		44C45F4B1F79F162001811EC /* QYAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C45F4A1F79F162001811EC /* QYAccount.m */; };
 		44C6CB731F7DCAB0004CDB88 /* NSString+encryptString.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C6CB721F7DCAB0004CDB88 /* NSString+encryptString.m */; };
+		864CCF851F8CDC4F00E4F503 /* CYTESTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 864CCF841F8CDC4F00E4F503 /* CYTESTViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +60,8 @@
 		44C6CB711F7DCAB0004CDB88 /* NSString+encryptString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+encryptString.h"; sourceTree = "<group>"; };
 		44C6CB721F7DCAB0004CDB88 /* NSString+encryptString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+encryptString.m"; sourceTree = "<group>"; };
 		5D81B7FFAA6E5BA406021F75 /* Pods-testHttp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testHttp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-testHttp/Pods-testHttp.debug.xcconfig"; sourceTree = "<group>"; };
+		864CCF831F8CDC4F00E4F503 /* CYTESTViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYTESTViewController.h; sourceTree = "<group>"; };
+		864CCF841F8CDC4F00E4F503 /* CYTESTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CYTESTViewController.m; sourceTree = "<group>"; };
 		A1D2080900F7EE62C2829594 /* Pods-testHttp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testHttp.release.xcconfig"; path = "Pods/Target Support Files/Pods-testHttp/Pods-testHttp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -77,6 +80,7 @@
 		44C45F231F79F0C1001811EC = {
 			isa = PBXGroup;
 			children = (
+				864CCF821F8CDC2000E4F503 /* cytest */,
 				44C45F2E1F79F0C1001811EC /* testHttp */,
 				44C45F2D1F79F0C1001811EC /* Products */,
 				57AEE2F56B7D3F0B864870C1 /* Pods */,
@@ -142,6 +146,15 @@
 				2D0891E2819138463DA2207C /* libPods-testHttp.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		864CCF821F8CDC2000E4F503 /* cytest */ = {
+			isa = PBXGroup;
+			children = (
+				864CCF831F8CDC4F00E4F503 /* CYTESTViewController.h */,
+				864CCF841F8CDC4F00E4F503 /* CYTESTViewController.m */,
+			);
+			path = cytest;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,6 +286,7 @@
 				44650DF21F7B812500989930 /* PortDetailsViewController.m in Sources */,
 				44650DEE1F7B50BA00989930 /* PortListTableViewController.m in Sources */,
 				44C6CB731F7DCAB0004CDB88 /* NSString+encryptString.m in Sources */,
+				864CCF851F8CDC4F00E4F503 /* CYTESTViewController.m in Sources */,
 				443324251F7C9310007459BC /* ParameterTableViewCell.m in Sources */,
 				44C45F341F79F0C1001811EC /* ViewController.m in Sources */,
 				44C45F3F1F79F0C1001811EC /* main.m in Sources */,

@@ -21,7 +21,7 @@
     for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
         [output appendFormat:@"%02x", digest[i]];
     
-    return  output;
+    return  [output uppercaseString];
 }
 
 + (NSString *)stringByJSONObject:(id)JSONObject {
