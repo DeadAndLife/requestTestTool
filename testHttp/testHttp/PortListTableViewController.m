@@ -7,8 +7,9 @@
 //
 
 #import "PortListTableViewController.h"
-#import "HomeTableViewCell.h"
 #import "PortDetailsViewController.h"
+#import "HomeTableViewCell.h"
+#import "Common.h"
 
 @interface PortListTableViewController ()<UITextFieldDelegate, UIGestureRecognizerDelegate>
 
@@ -24,14 +25,22 @@
 
 - (NSMutableArray *)dateArray {
     if (_dateArray == nil) {
+        _dateArray = [NSMutableArray array];
         
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         NSString *folderPath = [documentPath stringByAppendingPathComponent:self.folderName];
-        NSArray * tempFileList = [[NSArray alloc] initWithArray:[fileManager contentsOfDirectoryAtPath:folderPath error:nil]];
         
-        _dateArray = [NSMutableArray arrayWithArray:tempFileList];
-        
+        NSDirectoryEnumerator *myDirectoryEnumerator = [fileManager enumeratorAtPath:folderPath];
+        NSString *file;
+        while((file = [myDirectoryEnumerator nextObject]))     //遍历当前目录
+        {
+            if([[file pathExtension] isEqualToString:@"plist"])   //取得后缀名为.plist的文件
+            {
+                [_dateArray addObject:file]; //存到数组
+            }
+        }
+        //        NSArray * tempFileList = [[NSArray alloc] initWithArray:[fileManager contentsOfDirectoryAtPath:folderPath error:nil]];
     }
     
     return _dateArray;
@@ -54,6 +63,16 @@
     
     [self.view addGestureRecognizer:tapGR];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    //增加监听，当键退出时收出消息
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -84,18 +103,35 @@
     
 - (IBAction)tapGRClick:(UITapGestureRecognizer *)sender {
     
-    if ( self.firstResponder && sender.numberOfTouches == 1) {//单击
+    if (self.firstResponder && sender.numberOfTouches == 1) {//单击
         [self.view endEditing:YES];
     }
     
 }
 
+#pragma mark - keyboard
+//键盘显示时调用
+- (void)keyboardWillShow:(NSNotification *)aNotification {
+    NSDictionary *userInfo = [aNotification userInfo];
+    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [aValue CGRectValue];
+    int height = keyboardRect.size.height;
+    
+    self.tableView.frame = CGRectMake(0, 0, SCREEN_W, SCREEN_H - height);
+}
+
+//当键退出时调用
+- (void)keyboardWillHide:(NSNotification *)aNotification {
+    
+    self.tableView.frame = CGRectMake(0, 0, SCREEN_W, SCREEN_H);
+}
+
 #pragma mark-手势代理，解决和tableview点击发生的冲突
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if ([NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {//判断如果点击的是tableView的cell，就把手势给关闭了
-        return NO;//关闭手势
-    }//否则手势存在
-    return YES;
+    if (self.firstResponder) {//判断如果存在第一响应
+        return YES;//手势存在
+    }//否则关闭手势
+    return NO;
 }
 
 #pragma mark - UITextFieldDelegate
@@ -159,7 +195,7 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    HomeTableViewCell *cell = [[NSBundle mainBundle]loadNibNamed:@"HomeTableViewCell" owner:self options:nil][0];
+    HomeTableViewCell *cell = [[NSBundle mainBundle] loadNibNamed:@"HomeTableViewCell" owner:self options:nil][0];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     cell.fileName.text = [self.dateArray[indexPath.row] stringByDeletingPathExtension];

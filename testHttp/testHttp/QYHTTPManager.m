@@ -13,26 +13,15 @@
 
 @implementation QYHTTPManager
 
-+(instancetype)qyManager{
-    QYHTTPManager *manager = [[QYHTTPManager alloc] initWithBaseURL:[NSURL URLWithString:kBaseURL]];
-    
-    return manager;
-}
+//+(instancetype)qyManager{
+//    QYHTTPManager *manager = [[QYHTTPManager alloc] initWithBaseURL:[NSURL URLWithString:kRequestURL]];
+//
+//    return manager;
+//}
 
-- (NSString *) md5:(NSString *) input {
-    const char *cStr = [input UTF8String];
-    unsigned char digest[CC_MD5_DIGEST_LENGTH];
-    CC_MD5( cStr, strlen(cStr), digest ); // This is the md5 call
-    
-    NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
-    
-    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
-        [output appendFormat:@"%02x", digest[i]];
-    
-    return  output;
-}
 
--(NSURLSessionDataTask *)GET:(NSString *)URLString parameters:(id)parameters CompletionHandle:(QYHTTPSessionManagerCompletionHandle)completionHandle{
+
+- (NSURLSessionDataTask *)GET:(NSString *)URLString parameters:(id)parameters CompletionHandle:(QYHTTPSessionManagerCompletionHandle)completionHandle{
     
     return [self GET:URLString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         completionHandle(responseObject, task, nil);
@@ -42,7 +31,7 @@
     
 }
 
--(NSURLSessionDataTask *)POST:(NSString *)URLString parameters:(id)parameters CompletionHandle:(QYHTTPSessionManagerCompletionHandle)completionHandle{
+- (NSURLSessionDataTask *)POST:(NSString *)URLString parameters:(id)parameters CompletionHandle:(QYHTTPSessionManagerCompletionHandle)completionHandle{
     return [self POST:URLString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         completionHandle(responseObject, task, nil);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -50,56 +39,7 @@
     }];
 }
 
-- (NSURLSessionDataTask *)loginAccount:(NSString *)phoneNumber
-                              password:(NSString *)password
-                                 isMd5:(bool)isMd5
-                      completionHandle:(QYHTTPSessionManagerCompletionHandle)completionHandle {
-    
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    
-    if (isMd5) {
-        
-        NSMutableDictionary *wDic = [NSMutableDictionary dictionary];
-        [wDic setObject:phoneNumber forKey:@"username"];
-        [wDic setObject:password forKey:@"password"];
-        NSMutableDictionary *base = [NSMutableDictionary dictionary];
-        [base setObject:wDic forKey:@"w"];
-        
-        NSString *baseString = [self stringByJSONObject:base];
-        
-        NSString *md5Str = [self md5:@"guanli20170925"];
-        
-        [params setObject:baseString forKey:@"base"];
-        [params setObject:md5Str forKey:@"key"];
-        
-    } else {
-        params = [NSMutableDictionary dictionaryWithDictionary:@{@"username":phoneNumber, @"password":password}];
-    }
-    
-    NSLog(@"%@", params);
-    
-    return [self POST:kLoginAPI parameters:params CompletionHandle:completionHandle];
-    
-}
 
-- (NSString *)stringByJSONObject:(id)JSONObject {
-    
-    NSString *JSONString = nil;
-    
-    if ([NSJSONSerialization isValidJSONObject:JSONObject]) {
-        
-        NSData *data = [NSJSONSerialization dataWithJSONObject:JSONObject options:NSJSONWritingPrettyPrinted error:nil];
-        JSONString = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-        
-    }else {
-        
-        NSLog(@"Error! Not is valid JSONObject.");
-        
-    }
-    
-    return JSONString;
-    
-}
 
 #pragma mark - 废弃的方法
 //-(NSURLSessionDataTask *)sendSMSCode:(NSString *)phoneNumber CompletionHandle:(QYHTTPSessionManagerCompletionHandle)completionHandle{
