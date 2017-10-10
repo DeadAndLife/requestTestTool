@@ -59,7 +59,7 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Cc-Ok-mZp">
+                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="253" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Cc-Ok-mZp">
                     <rect key="frame" x="195.5" y="228" width="171.5" height="30"/>
                     <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" title="发送请求">
@@ -101,8 +101,22 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </button>
-                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请填写接口URL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tbX-94-g06">
-                    <rect key="frame" x="195.5" y="57" width="171.5" height="30"/>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="252" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="ZsM-Jt-Fs9">
+                    <rect key="frame" x="195.5" y="192" width="171.5" height="29"/>
+                    <segments>
+                        <segment title="GET"/>
+                        <segment title="POST"/>
+                    </segments>
+                </segmentedControl>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="248" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ovp-ri-5AM">
+                    <rect key="frame" x="197.5" y="57" width="167.5" height="34"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" verticalHuggingPriority="254" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tbX-94-g06">
+                    <rect key="frame" x="195.5" y="59" width="171.5" height="30"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="textColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
@@ -110,17 +124,9 @@
                         <outlet property="delegate" destination="-1" id="mr1-ee-AWl"/>
                     </connections>
                 </textField>
-                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="ZsM-Jt-Fs9">
-                    <rect key="frame" x="195.5" y="192" width="171.5" height="29"/>
-                    <segments>
-                        <segment title="GET"/>
-                        <segment title="POST"/>
-                    </segments>
-                </segmentedControl>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="tbX-94-g06" firstAttribute="leading" secondItem="3WW-NQ-Mss" secondAttribute="trailing" constant="8" id="2lL-FR-0na"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="1Cc-Ok-mZp" secondAttribute="trailing" constant="8" id="3NX-zA-xeQ"/>
                 <constraint firstItem="ZsM-Jt-Fs9" firstAttribute="top" secondItem="PdV-tU-GS3" secondAttribute="bottom" constant="8" id="3n8-LN-7aw"/>
                 <constraint firstItem="oMZ-d3-8nz" firstAttribute="bottom" secondItem="Q5M-cg-NOt" secondAttribute="bottom" id="6Zh-CJ-dbB"/>
@@ -128,25 +134,30 @@
                 <constraint firstItem="1Cc-Ok-mZp" firstAttribute="top" secondItem="ZsM-Jt-Fs9" secondAttribute="bottom" constant="8" id="8dy-jM-4hT"/>
                 <constraint firstItem="rES-Sr-8As" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" constant="8" id="9ds-se-TsF"/>
                 <constraint firstItem="wBn-iS-KlV" firstAttribute="leading" secondItem="3WW-NQ-Mss" secondAttribute="trailing" constant="8" id="9yH-eO-Kua"/>
-                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="tbX-94-g06" secondAttribute="trailing" constant="8" id="Abr-ET-YCf"/>
                 <constraint firstItem="oMZ-d3-8nz" firstAttribute="top" secondItem="3WW-NQ-Mss" secondAttribute="bottom" id="C2L-mX-aRP"/>
                 <constraint firstItem="oMZ-d3-8nz" firstAttribute="trailing" secondItem="Q5M-cg-NOt" secondAttribute="trailing" id="Cng-ho-zt5"/>
+                <constraint firstItem="PdV-tU-GS3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ovp-ri-5AM" secondAttribute="bottom" constant="8" id="DhA-qL-xMh"/>
+                <constraint firstItem="tbX-94-g06" firstAttribute="bottom" secondItem="ovp-ri-5AM" secondAttribute="bottom" constant="-2" id="EAM-FQ-u51"/>
+                <constraint firstItem="tbX-94-g06" firstAttribute="top" secondItem="ovp-ri-5AM" secondAttribute="top" constant="2" id="HGk-1G-wtd"/>
                 <constraint firstItem="PdV-tU-GS3" firstAttribute="leading" secondItem="3WW-NQ-Mss" secondAttribute="trailing" constant="8" id="JsK-mR-zEB"/>
+                <constraint firstItem="tbX-94-g06" firstAttribute="leading" secondItem="ovp-ri-5AM" secondAttribute="leading" constant="-2" id="M9d-Bb-LiC"/>
                 <constraint firstItem="P2A-41-uTM" firstAttribute="leading" secondItem="wBn-iS-KlV" secondAttribute="trailing" constant="8" id="QKu-PZ-yod"/>
                 <constraint firstItem="rES-Sr-8As" firstAttribute="leading" secondItem="3WW-NQ-Mss" secondAttribute="trailing" constant="8" id="QRD-eg-2t5"/>
                 <constraint firstItem="wBn-iS-KlV" firstAttribute="width" secondItem="P2A-41-uTM" secondAttribute="width" id="Qcl-sJ-rNd"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="ovp-ri-5AM" secondAttribute="trailing" constant="10" id="SgR-p0-dVc"/>
                 <constraint firstItem="3WW-NQ-Mss" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" multiplier="0.5" id="XNK-zV-Z9y"/>
                 <constraint firstItem="1Cc-Ok-mZp" firstAttribute="leading" secondItem="3WW-NQ-Mss" secondAttribute="trailing" constant="8" id="aeO-Qb-Wh7"/>
                 <constraint firstItem="wBn-iS-KlV" firstAttribute="top" secondItem="1Cc-Ok-mZp" secondAttribute="bottom" constant="15" id="an8-7i-SO5"/>
-                <constraint firstItem="tbX-94-g06" firstAttribute="top" secondItem="rES-Sr-8As" secondAttribute="bottom" constant="8" id="csH-Tq-4NJ"/>
+                <constraint firstItem="ovp-ri-5AM" firstAttribute="top" secondItem="rES-Sr-8As" secondAttribute="bottom" constant="8" id="dkz-8N-fNz"/>
+                <constraint firstItem="tbX-94-g06" firstAttribute="trailing" secondItem="ovp-ri-5AM" secondAttribute="trailing" constant="2" id="hjh-LB-rLo"/>
                 <constraint firstItem="ZsM-Jt-Fs9" firstAttribute="leading" secondItem="3WW-NQ-Mss" secondAttribute="trailing" constant="8" id="nQ8-tQ-7Oc"/>
                 <constraint firstItem="wBn-iS-KlV" firstAttribute="centerY" secondItem="P2A-41-uTM" secondAttribute="centerY" id="p1b-Ie-OG1"/>
+                <constraint firstItem="ovp-ri-5AM" firstAttribute="leading" secondItem="3WW-NQ-Mss" secondAttribute="trailing" constant="10" id="p9u-fS-p3U"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="ZsM-Jt-Fs9" secondAttribute="trailing" constant="8" id="qz5-aD-fUA"/>
                 <constraint firstItem="3WW-NQ-Mss" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" id="qzt-S7-23g"/>
                 <constraint firstItem="oMZ-d3-8nz" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.5" id="rBN-gp-p7P"/>
                 <constraint firstItem="oMZ-d3-8nz" firstAttribute="top" secondItem="wBn-iS-KlV" secondAttribute="bottom" constant="8" id="tvI-Xk-0H4"/>
                 <constraint firstItem="3WW-NQ-Mss" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="udH-LE-uuq"/>
-                <constraint firstItem="PdV-tU-GS3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="tbX-94-g06" secondAttribute="bottom" constant="8" id="vuw-wL-iVS"/>
                 <constraint firstItem="oMZ-d3-8nz" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="wfd-06-LCY"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>

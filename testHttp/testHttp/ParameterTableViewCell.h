@@ -28,7 +28,7 @@
 /**
  值文本
  */
-@property (weak, nonatomic) IBOutlet UITextField *valueText;
+@property (weak, nonatomic) IBOutlet UITextView *valueText;
 
 /**
  增加一个参数文本

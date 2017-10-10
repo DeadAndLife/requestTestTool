@@ -305,7 +305,7 @@
         if (type == 0) {//key
             cell.keyText.placeholder = cell.keyText.text;
         } else {//value
-            cell.valueText.placeholder = cell.valueText.text;
+            cell.valueText.text = cell.valueText.text;
         }
         
     }

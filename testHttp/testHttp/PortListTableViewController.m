@@ -25,14 +25,22 @@
 
 - (NSMutableArray *)dateArray {
     if (_dateArray == nil) {
+        _dateArray = [NSMutableArray array];
         
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         NSString *folderPath = [documentPath stringByAppendingPathComponent:self.folderName];
-        NSArray * tempFileList = [[NSArray alloc] initWithArray:[fileManager contentsOfDirectoryAtPath:folderPath error:nil]];
         
-        _dateArray = [NSMutableArray arrayWithArray:tempFileList];
-        
+        NSDirectoryEnumerator *myDirectoryEnumerator = [fileManager enumeratorAtPath:folderPath];
+        NSString *file;
+        while((file = [myDirectoryEnumerator nextObject]))     //遍历当前目录
+        {
+            if([[file pathExtension] isEqualToString:@"plist"])   //取得后缀名为.plist的文件
+            {
+                [_dateArray addObject:file]; //存到数组
+            }
+        }
+        //        NSArray * tempFileList = [[NSArray alloc] initWithArray:[fileManager contentsOfDirectoryAtPath:folderPath error:nil]];
     }
     
     return _dateArray;
