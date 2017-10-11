@@ -84,35 +84,82 @@
     NSLog(@"%@", info[UIImagePickerControllerOriginalImage]);
     self.image = info[UIImagePickerControllerOriginalImage];
     
-    NSData *data = UIImageJPEGRepresentation(self.image, 0.2f);
+    NSData *data = UIImageJPEGRepresentation(self.image, 1.0f);
     
     NSString *encodedImageStr = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    
+//    NSString *base64String = [NSString stringWithFormat:@""];
     
     NSMutableDictionary *upDict = [NSMutableDictionary dictionary];
     [upDict setObject:@"image/png" forKey:@"type"];
     [upDict setObject:encodedImageStr forKey:@"content"];
+    [upDict setObject:@(data.length) forKey:@"size"];
     
     NSMutableDictionary *baseDict = [NSMutableDictionary dictionary];
     [baseDict setObject:upDict forKey:@"up"];
     
+    NSMutableString *baseString = [NSMutableString stringWithString:[NSString  stringByJSONObject:baseDict]];
+    
+//    NSString *character = nil;
+//    for (int i = 0; i < baseString.length; i ++) {
+//        character = [baseString substringWithRange:NSMakeRange(i, 1)];
+//        if ([character isEqualToString:@"\n"]){
+//            [baseString deleteCharactersInRange:NSMakeRange(i, 1)];
+//        }
+//    }
+
     NSMutableDictionary *paraDict = [NSMutableDictionary dictionary];
-    [paraDict setObject:baseDict forKey:@"base"];
+    [paraDict setObject:baseString forKey:@"base"];
     [paraDict setObject:[NSString md5:@"guanli20170925"] forKey:@"key"];
     
-    NSLog(@"%@", paraDict);
+//    NSLog(@"%@", paraDict);
     
-    [[QYHTTPManager alloc] POST:@"http://guanli.zhaihongli.com/api/uploads/up_img"
-                     parameters:paraDict
-               CompletionHandle:^(id responseObject, NSURLSessionTask *task, NSError *error) {
-
-                   if (responseObject && responseObject[@""]) {
-
-                   }
-
-                   NSLog(@"%@", responseObject);
-                   NSLog(@"%@", error);
-
-               }];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
+    
+    [manager POST:@"http://guanli.zhaihongli.com/api/uploads/up_img"
+       parameters:paraDict
+constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    [formData appendPartWithFileData:data name:@"file" fileName:@"123456" mimeType:@"image/png"];
+} progress:nil
+          success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+              
+              NSDictionary * responseDict = (NSDictionary *)responseObject;
+              UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"成功" message:responseDict.description preferredStyle:UIAlertControllerStyleAlert];
+              
+              UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                  [alertVC dismissViewControllerAnimated:YES completion:nil];
+              }];
+              
+              [alertVC addAction:okAction];
+              
+              [self presentViewController:alertVC animated:YES completion:nil];
+              
+          } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+              UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"失败" message:error.description preferredStyle:UIAlertControllerStyleAlert];
+              
+              UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                  [alertVC dismissViewControllerAnimated:YES completion:nil];
+              }];
+              
+              [alertVC addAction:okAction];
+              
+              [self presentViewController:alertVC animated:YES completion:nil];
+          }];
+    
+    
+//    [[QYHTTPManager alloc] POST:@"http://guanli.zhaihongli.com/api/uploads/up_img"
+//                     parameters:paraDict
+//               CompletionHandle:^(id responseObject, NSURLSessionTask *task, NSError *error) {
+//
+//                   if (responseObject && responseObject[@""]) {
+//
+//                   }
+//
+//                   NSLog(@"%@", responseObject);
+//                   NSLog(@"%@", error);
+//
+//               }];
     
 //    self.imageView.image = info[UIImagePickerControllerOriginalImage];
 }
