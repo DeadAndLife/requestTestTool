@@ -11,11 +11,13 @@
 #import "QYHTTPManager.h"
 #import "Common.h"
 
-@interface PortDetailsViewController ()<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate>
+@interface PortDetailsViewController ()<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextView *logView;
 
 @property (weak, nonatomic) IBOutlet UITableView *parameterTableView;
+
+@property (weak, nonatomic) IBOutlet UITextView *portURLTextView;
 
 @property (weak, nonatomic) IBOutlet UITextField *portURL;
 
@@ -95,7 +97,7 @@
 
 - (void)viewInit {
     if (self.plistData[kRequestURL]) {
-        self.portURL.text = self.plistData[kRequestURL];
+        self.portURLTextView.text = self.plistData[kRequestURL];
     }
     if (self.plistData[kRequestType]) {
         [self.requestType setSelectedSegmentIndex:(long)self.plistData[kRequestType]];
@@ -117,6 +119,9 @@
     [self.sendRequest addTarget:self action:@selector(sendRequest:) forControlEvents:UIControlEventTouchUpInside];
     [self.saveParameter addTarget:self action:@selector(saveParameter:) forControlEvents:UIControlEventTouchUpInside];
     [self.saveLog addTarget:self action:@selector(saveLog:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.parameterTableView.estimatedRowHeight = -1;
+    self.parameterTableView.rowHeight = -1;
     
     [self dataInit];
     
@@ -162,7 +167,7 @@
     }
     
     if (self.requestType.selectedSegmentIndex == 0) {//GET
-        [[[QYHTTPManager alloc] init] GET:self.portURL.text
+        [[[QYHTTPManager alloc] init] GET:self.portURLTextView.text
                                parameters:self.parameterDict
                          CompletionHandle:^(id responseObject, NSURLSessionTask *task, NSError *error) {
                              
@@ -176,7 +181,7 @@
                          }];
         
     } else {//POST
-        [[[QYHTTPManager alloc] init] POST:self.portURL.text
+        [[[QYHTTPManager alloc] init] POST:self.portURLTextView.text
                                 parameters:self.parameterDict
                           CompletionHandle:^(id responseObject, NSURLSessionTask *task, NSError *error) {
                              
@@ -202,8 +207,8 @@
 - (IBAction)saveParameter:(UIButton *)sender {
     
     //请求的url
-    if (self.portURL.text) {
-        [self.plistData setValue:self.portURL.text forKey:kRequestURL];
+    if (self.portURLTextView.text) {
+        [self.plistData setValue:self.portURLTextView.text forKey:kRequestURL];
     }
     //请求头设置
     if (self.headerDict && ![self.headerDict  isEqual:@{}]) {
@@ -287,6 +292,124 @@
     return NO;
 }
 
+#pragma mark - UITextViewDelegate
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+    if (textView == self.logView) {
+        return NO;
+    }
+    return YES;
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    self.firstResponder = textView;
+    
+    if (textView == self.portURLTextView) {//为接口地址时的处理
+        
+    } else {//为参数的处理
+        NSInteger type = textView.tag % 10;
+        NSInteger row = textView.tag / 10 % 100;
+        NSInteger section = textView.tag / 1000 - 1;
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+        ParameterTableViewCell *cell = [self.parameterTableView cellForRowAtIndexPath:indexPath];
+        
+        if (type == 0) {//key
+            cell.keyText.placeholder = cell.keyText.text;
+        } else {//value
+            cell.valueText.text = cell.valueText.text;
+        }
+    }
+    
+}
+
+- (void)textViewDidChange:(UITextView *)textView {
+    if (textView == self.portURLTextView) {
+        CGRect bounds = textView.bounds;
+        // 计算 text view 的高度
+        CGSize maxSize = CGSizeMake(bounds.size.width, CGFLOAT_MAX);
+        CGSize newSize = [textView sizeThatFits:maxSize];
+        bounds.size = newSize;
+        textView.bounds = bounds;
+    } else {
+        NSInteger type = textView.tag % 10;
+        NSInteger row = textView.tag / 10 % 100;
+        NSInteger section = textView.tag / 1000 - 1;
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+        ParameterTableViewCell *cell = [self.parameterTableView cellForRowAtIndexPath:indexPath];
+        
+        if (section == 0) {//header
+            if (type == 0) {//key
+                [self.headerDict setObject:self.headerDict[cell.keyText.placeholder]  forKey:cell.keyText.text];
+                [self.headerDict removeObjectForKey:cell.keyText.placeholder];
+            } else {//value
+                [self.headerDict setObject:cell.valueText.text forKey:cell.keyText.text];
+            }
+        } else {//参数
+            if (type == 0) {//key
+                [self.parameterDict setObject:self.parameterDict[cell.keyText.placeholder] forKey:cell.keyText.text];
+                [self.parameterDict removeObjectForKey:cell.keyText.placeholder];
+            } else {//value
+                [self.parameterDict setObject:cell.valueText.text forKey:cell.keyText.text];
+            }
+        }
+        
+        CGRect bounds = textView.bounds;
+        // 计算 text view 的高度
+        CGSize maxSize = CGSizeMake(bounds.size.width, CGFLOAT_MAX);
+        CGSize newSize = [textView sizeThatFits:maxSize];
+        bounds.size = newSize;
+        textView.bounds = bounds;
+        // 让 table view 重新计算高度
+        [self.parameterTableView beginUpdates];
+        [self.parameterTableView endUpdates];
+    }
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    [textView resignFirstResponder];
+    
+    if (textView == self.portURLTextView) {
+        
+    } else {
+        NSInteger type = textView.tag % 10;
+        NSInteger row = textView.tag / 10 % 100;
+        NSInteger section = textView.tag / 1000 - 1;
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+        ParameterTableViewCell *cell = [self.parameterTableView cellForRowAtIndexPath:indexPath];
+        
+        if (section == 0) {//header
+            if (type == 0) {//key
+                [self.headerDict setObject:self.headerDict[cell.keyText.placeholder]  forKey:cell.keyText.text];
+                [self.headerDict removeObjectForKey:cell.keyText.placeholder];
+            } else {//value
+                [self.headerDict setObject:cell.valueText.text forKey:cell.keyText.text];
+            }
+        } else {//参数
+            if (type == 0) {//key
+                [self.parameterDict setObject:self.parameterDict[cell.keyText.placeholder] forKey:cell.keyText.text];
+                [self.parameterDict removeObjectForKey:cell.keyText.placeholder];
+            } else {//value
+                [self.parameterDict setObject:cell.valueText.text forKey:cell.keyText.text];
+            }
+        }
+        
+        CGRect bounds = textView.bounds;
+        // 计算 text view 的高度
+        CGSize maxSize = CGSizeMake(bounds.size.width, CGFLOAT_MAX);
+        CGSize newSize = [textView sizeThatFits:maxSize];
+        bounds.size = newSize;
+        textView.bounds = bounds;
+        // 让 table view 重新计算高度
+        [self.parameterTableView beginUpdates];
+        [self.parameterTableView endUpdates];
+        
+    }
+    
+    self.firstResponder = nil;
+}
+
 #pragma mark - UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     
@@ -307,9 +430,7 @@
         } else {//value
             cell.valueText.text = cell.valueText.text;
         }
-        
     }
-    
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
